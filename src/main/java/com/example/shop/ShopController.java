@@ -2,6 +2,8 @@ package com.example.shop;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @RequestMapping
 @Controller
@@ -18,7 +20,9 @@ public class ShopController {
         return shop;
     }
 
-    public void sellItem(Human human, String itemName) {
+    @RequestMapping("/new")
+    @ResponseBody
+    public void sellItem(Human human, @RequestParam String itemName) {
 
         if (shop.hasItem(itemName)) {
             Item item = shop.findItemByName(itemName);
@@ -30,8 +34,6 @@ public class ShopController {
                 throw new ToLittleMoneyException();
             } else {
                 int newMoney = human.getMoney() - item.getPrice();
-                System.out.println(human.getMoney());
-                System.out.println(item.getPrice());
                 human.setMoney(newMoney);
                 shop.setMoney(shop.getMoney() + item.getPrice());
                 if (shop.getStock().get(item) - 1 != 0) {
@@ -43,9 +45,7 @@ public class ShopController {
             }
         } else {
             throw new OutOfStockException();
-            // TODO sklep nie ma danego przedmiotu, wyrzuć wyjątek OutOfStockException
         }
-
     }
 
 }

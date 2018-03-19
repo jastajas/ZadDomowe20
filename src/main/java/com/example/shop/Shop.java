@@ -5,14 +5,27 @@ import org.springframework.stereotype.Component;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
-
+@Component
 public class Shop {
 
     private int money;
     private Map<Item, Integer> stock;
     MusicPlayer musicPlayer;
+
+    public Shop() {
+        Map<Item, Integer> stocki = new HashMap<>();
+        stocki.put(new Item("chleb", 0, 12, true), 4);
+        stocki.put(new Item("mleko", 0, 3, true), 6);
+        stocki.put(new Item("piwo", 18, 5, true), 22);
+
+        musicPlayer = new MusicPlayer();
+        money = 0;
+        stock = stocki;
+
+    }
 
 
     public Shop(int money, Map<Item, Integer> stock, MusicPlayer musicPlayer) {
@@ -40,7 +53,6 @@ public class Shop {
             if (item.getName().equals(itemName))
                 return true;
         }
-        // TODO dodaj kod sprawdzający czy sklep na w asortymencie przedmot o danej nazwie
         return false;
     }
 
@@ -51,7 +63,6 @@ public class Shop {
                 return item;
         }
 
-        // TODO dodaj kod wyszukujący przedmiot po jego nazwie
         return null;
     }
 

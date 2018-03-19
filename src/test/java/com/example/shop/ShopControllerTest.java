@@ -21,13 +21,12 @@ public class ShopControllerTest {
 
         shopRepository = Mockito.mock(ShopRepository.class);
 
-        shopController = new ShopController(shopRepository);
-
 
         Map<Item, Integer> stock = new HashMap<>();
         stock.put(new Item("chleb", 0, 12, true), 4);
         stock.put(new Item("mleko", 0, 3, true), 6);
         stock.put(new Item("piwo", 18, 5, true), 22);
+        stock.put(new Item("trawa", 18, 20, false), 5);
 
         MusicPlayer musicPlayer = new MusicPlayer();
 
@@ -35,13 +34,14 @@ public class ShopControllerTest {
 
         Mockito.when(shopRepository.findShop()).thenReturn(shop);
 
-        shopController = Mockito.mock(ShopController.class);
+        shopController = new ShopController(shopRepository);
 
     }
 
     @Test
     public void shopSell() {
         //give
+        shopController = Mockito.mock(ShopController.class);
         Human human = new Human("Jan", 20, "lekarz", 20);
         String productName = "mleko";
         //when
@@ -59,6 +59,24 @@ public class ShopControllerTest {
         shopController.sellItem(human, productName);
     }
 
+    @Test(expected = BandSaleException.class)
+    public void shouldNotSellIlligal() {
+        // given
+        Human human = new Human("Jan", 29, "policjant", 20);
+        String productName = "trawa";
+        // when
+        shopController.sellItem(human, productName);
+    }
+
+    @Test(expected = OutOfStockException.class)
+    public void itemOutOfStock() {
+        // given
+        Human human = new Human("Jan", 29, "programista", 20);
+        String productName = "kapcie";
+        // when
+        shopController.sellItem(human, productName);
+    }
+
 
     @Test
     public void milkSellShopProfits() {
@@ -69,7 +87,7 @@ public class ShopControllerTest {
         shopController.sellItem(human, productName);
         int result = shopController.getShop().getMoney();
         //then
-        Assert.assertThat(result, CoreMatchers.is(6));
+        Assert.assertThat(result, CoreMatchers.is(3));
     }
 
     @Test
@@ -81,7 +99,7 @@ public class ShopControllerTest {
         shopController.sellItem(human, productName);
         int result = human.getMoney();
         //then
-        Assert.assertThat(result, CoreMatchers.is(14));
+        Assert.assertThat(result, CoreMatchers.is(17));
     }
 
     @Test

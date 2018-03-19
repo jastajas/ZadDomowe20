@@ -15,7 +15,7 @@ public class ShopRepository {
     public Shop findShop() {
         return shop;
         /* ta metoda z premedytacją nic nie zwraca. W prawdziwym wypadku byłoby tutaj połączenie z bazą danych
-        * która zwraca aktualny stan z bazy. W tym zadaniu chodzi o to, żeby przygotować dane testowe które nie pochodzą
+         * która zwraca aktualny stan z bazy. W tym zadaniu chodzi o to, żeby przygotować dane testowe które nie pochodzą
          * z bazy danych */
     }
 
